@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-12">
+    <mat-tab-group
+      animationDuration="0ms"
+      [selectedIndex]="selectedTabId"
+      (selectedTabChange)="onTabChange($event)"
+    >
+      <mat-tab label="Bubble Sort">
+        <ng-template matTabContent>
+          <app-bubble-sort></app-bubble-sort>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Selection Sort">
+        <ng-template matTabContent>
+          Selection Sort
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

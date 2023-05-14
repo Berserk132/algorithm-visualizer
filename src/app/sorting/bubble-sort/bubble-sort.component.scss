@@ -1,0 +1,19 @@
+#sort-container {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+
+.element {
+  // padding-right: 2px;
+  // position: absolute !important;
+  // bottom: 0;
+  // left: 0;
+  // background: linear-gradient(0deg, rgba(22, 22, 22, 1) 5%, rgba(210, 210, 210, 1) 100%);
+  background: linear-gradient(0deg, rgba(22, 22, 22, 1) 5%, rgba(210, 210, 210, 1) 100%);
+}

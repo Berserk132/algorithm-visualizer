@@ -1,0 +1,52 @@
+<!-- START MAIN CONTAINER -->
+
+<div
+  class="sort-container"
+  style="border: 1px solid black; height: 502px; margin: 15px"
+>
+  <mat-grid-list cols="4" rowHeight="500px">
+    <mat-grid-tile colspan="3" rowspan="1">
+      <!-- <div class="sort-canvas" style="width: 90%">
+  </div> -->
+      <div id="sort-container">
+        <div
+          class="element"
+          *ngFor="let element of elements"
+          [style.width]="element.width"
+          [style.height]="element.height"
+        ></div>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1" rowspan="1" style="background-color: aquamarine">
+      <mat-card>
+        <mat-card-content>
+          <h2>Result</h2>
+          <div class="example-label-container">
+            <label id="example-name-label" class="example-name-label"
+              >Value</label
+            >
+            <label class="example-value-label">{{ value }}</label>
+          </div>
+          <mat-slider class="example-margin" max="500" min="10" step="1">
+            <input
+              matSliderThumb
+              [(ngModel)]="value"
+              (change)="drawColumns()"
+            />
+          </mat-slider>
+        </mat-card-content>
+      </mat-card>
+      <!-- <div style="align-self: center">
+        <button
+          id="btn-sort"
+          style="border-radius: 10%; outline: none"
+          (click)="runAlgo()"
+        >
+          Start Sorting
+        </button>
+      </div> -->
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+<!-- END MAIN CONTAINER -->
