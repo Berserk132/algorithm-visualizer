@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
-import * as d3 from "d3";
-import { Element } from '../models/element.model';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-bubble-sort',
   templateUrl: './bubble-sort.component.html',
-  styleUrls: ['./bubble-sort.component.scss']
+  styleUrls: ['./bubble-sort.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BubbleSortComponent {
   title = 'algorithm-visualizer';
   svg: any;
-  elements: Element[] = [];
+  elements = [];
   maxHeight = 250
   maxNumber = 80
   currentX = 100;
@@ -18,7 +17,6 @@ export class BubbleSortComponent {
   // DOM
   btnSort = document.getElementById('btn-sort')
   delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 
   constructor() {
   }
@@ -28,94 +26,63 @@ export class BubbleSortComponent {
 
   drawColumns() {
     let sortContainer: HTMLElement | null = document.getElementById('sort-container');
-    this.elements = [];
     let elementWidth = 100.0 / this.value;
     let elementHeight = 100.0 / this.value;
-    let leftValue = 0.0;
     sortContainer.innerHTML = '';
     for (let i = 0; i < this.value; i++) {
-      // this.elements.push({
-      //   width: `${elementWidth}%`,
-      //   height: `${elementHeight}%`,
-      //   left: `${leftValue}%`
-      // });
       var element = document.createElement('div');
       element.classList.add('element');
       element.style.width = `${elementWidth}%`;
-      // element.style.position = `absolute`;
       element.style.height = `${elementHeight}%`;
-      // element.style.left = `${leftValue}%`;
       element.style.background = `linear-gradient(0deg, rgba(22,22,22,1) 5%, rgba(210,210,210,1) 100%)`;
-      // element.style.bottom = `0`;
-      // element.style.paddingRight = `2px`;
+
       sortContainer.appendChild(element);
+      this.elements.push(element);
 
       elementHeight += elementWidth;
-      leftValue += elementWidth;
     }
+
+    this.randomizeColumns();
   }
 
+  async randomizeColumns() {
+    for (let i = 0; i < this.elements.length; i++) {
+      let rand_index = Math.floor(Math.random() * this.elements.length);
+      await this.swap(i, rand_index, 50);
+    }
 
-
-  async changeColors(first: any, second: any) {
-    first.children[0].style['fill'] = 'red'
-    second.children[0].style['fill'] = 'blue'
-    await this.delay(20)
   }
 
-  async SWAP(arr: any[], index: number) {
+  async swap(i, j, delay) {
+    this.changeColor(i, 'red');
+    this.changeColor(j, 'green');
 
-    let tmp = arr[index]
-    arr[index] = arr[index + 1]
-    arr[index + 1] = tmp
+    [this.elements[i].style.height, this.elements[j].style.height] = [this.elements[j].style.height, this.elements[i].style.height];
 
-    await this.delay(20)
+    await this.delay(delay);
 
-    arr[index].children[0].style['fill'] = 'grey'
-    arr[index + 1].children[0].style['fill'] = 'grey'
+    this.resetColor(i, 'red');
+    this.resetColor(j, 'green');
   }
 
-  getElementNumber(element: any) {
-
-    return parseInt(element.children[1].innerHTML)
+  changeColor(i, color) {
+    this.elements[i].classList.add(color);
   }
 
-  getPosition(element: any) {
-    let tmp = element.getAttribute('transform')
-    tmp = tmp.replace('translate(', '').replace(')', '').split(',')
-    return tmp
-  }
-
-  runAlgo() {
-    this.bubbleSort();
+  resetColor(i, color) {
+    this.elements[i].classList.remove(color);
   }
 
   async bubbleSort() {
-    let barsArr = document.getElementsByTagName('g')
-    let gElements = []
-    for (let i = 0; i < barsArr.length; i++) {
-
-      gElements.push(barsArr[i])
-    }
-    let len = gElements.length;
-    for (let i = 0; i < len - 1; i++) {
+    let len = this.elements.length;
+    for (let i = 0; i < len; i++) {
       for (let j = 0; j < len - 1 - i; j++) {
-        let first = this.getElementNumber(gElements[j])
-        let second = this.getElementNumber(gElements[j + 1])
-        if (first > second) {
-          let firstPosition = this.getPosition(gElements[j])
-          let secondPosition = this.getPosition(gElements[j + 1])
-
-
-          await this.changeColors(gElements[j], gElements[j + 1])
-
-          gElements[j].setAttribute('transform', `translate(${parseInt(firstPosition[0]) + 50}, ${parseInt(firstPosition[1])})`)
-          gElements[j + 1].setAttribute('transform', `translate(${parseInt(secondPosition[0]) - 50}, ${parseInt(secondPosition[1])})`)
-
-          await this.SWAP(gElements, j)
+        let first = this.elements[j].style.height;
+        let second = this.elements[j + 1].style.height;
+        if (parseFloat(first) > parseFloat(second)) {
+          await this.swap(j, j + 1, 20);
         }
       }
     }
-    return gElements;
   };
 }
